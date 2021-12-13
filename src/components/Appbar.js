@@ -16,7 +16,7 @@ const AppbarButton = styled(Button)`
 
 const pages = [
     {
-        title: "Quiz",
+        title: "Random Quiz",
         link: "/normalmode"
     },
     {
