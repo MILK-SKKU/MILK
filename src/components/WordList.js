@@ -144,17 +144,6 @@ const TypoNoWordList = styled(Typography)`
     `
 
 function WordList({history}){
-
-    if (sessionStorage.wordlist === undefined){
-        return(
-            <>
-            <Appbar />
-            <TypoNoWordList>오답 단어장이 없습니다!</TypoNoWordList>
-            </>
-        )
-    }
-
-    let wordList = JSON.parse(sessionStorage.getItem("wordlist"))
     const [definition, setDefinition] =useState()
     const [simWord, setSimWord] = useState("")
 
@@ -170,6 +159,18 @@ function WordList({history}){
         }
         getDict(wordList[0])
     }, [])
+
+
+    if (sessionStorage.wordlist === undefined) {
+        return (
+            <>
+                <Appbar />
+                <TypoNoWordList>오답 단어장이 없습니다!</TypoNoWordList>
+            </>
+        )
+    }
+
+    let wordList = JSON.parse(sessionStorage.getItem("wordlist"))
 
     const handleDefinition = (item) => {
         async function getDict(word){
