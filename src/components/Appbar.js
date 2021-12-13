@@ -1,88 +1,71 @@
-import React from 'react'
-import styled from 'styled-components';
-// import styled from '@mui/styled-engine';
-// import styled from '@emotion/styled';
-// import {styled} from '@mui/material/styles';
-import { Typography, Button, Container, Card, CardActionArea, TextField, AppBar, Toolbar, Box, IconButton} from '@mui/material';
+import { useState } from 'react'
+import { Typography, AppBar, Box, IconButton, Container, Toolbar, Menu, MenuItem, Button } from '@mui/material';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
-import HomeIcon from '@mui/icons-material/Home';
+import styled from 'styled-components';
 
-const TypoMain = styled(Typography)`
-    position: absolute;
-    display: inline;
-    left: 25px;
-    top: 12px;
-    font-size: 26px;
-    `
-const TypoNormalMode = styled(Typography)`
-    position: relative;
-    left: 170px;
-    top: 15px;
-    font-size: 18px;
-    `
-const TypoMakeQuiz = styled(Typography)`
-    position: absolute;
-    left: 320px;
-    top: 15px;
-    font-size: 18px;
+
+
+const AppbarLogo = styled(Typography)`
+    font-family : "Pretendard";
+    font-weight : 900;
+`
+const AppbarButton = styled(Button)`
+    font-family : "Pretendard";
+    font-weight : 500;
 `
 
-const TypoWordList = styled(Typography)`
-    position: absolute;
-    left: 450px;
-    top: 15px;
-    font-size: 18px;
-`
-const HomeButton = styled(IconButton)`
-    position: absolute;
-    right: 25px;
-    top: 15px;
-    width: 30px;
-    height: 30px;
-    `
-
-const Home = styled(HomeIcon)`
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    color: skyblue;
-    
-    `
-const CustomAppBar = styled(AppBar)`
-    height: 60px;
-    `
+const pages = [
+    {
+        title: "Quiz",
+        link: "/normalmode"
+    },
+    {
+        title: "Create Quiz",
+        link: "/myquiz"
+    },
+    {
+        title: "Word List",
+        link: "/wordlist"
+    },
+]
 
 
-function Appbar(){
+function Appbar() {
     const history = useHistory()
-
-    const handleLinkHome = () => {
-        history.push("/")
-    }
-    const handleLinkMyQuiz = () => {
-        history.push("/myquiz")
-    }
-    const handleLinkNormalMode= () => {
-        history.push("/normalmode")
-    }
-    const handleLinkWordList = () => {
-        history.push("/wordlist")
+    
+    const handleLink = (url) => {
+        history.push(url)
     }
 
-    return(
+
+    return (
         <>
-        <Box sx={{flexGrow: 1}}>
-            <CustomAppBar position="static" simple>
-                <TypoMain>MILK</TypoMain>
-                <TypoNormalMode onClick={handleLinkNormalMode}>Normal Mode</TypoNormalMode>
-                <TypoMakeQuiz onClick={handleLinkMyQuiz}>Make Quiz</TypoMakeQuiz>
-                <TypoWordList onClick={handleLinkWordList}>Word List</TypoWordList>
-                <HomeButton onClick={handleLinkHome}>
-                    <Home />
-                </HomeButton>
-            </CustomAppBar>
-
-        </Box>
+            <AppBar position="static">
+                <Container maxWidth="xl">
+                    <Toolbar disableGutters>
+                        <AppbarLogo
+                            variant='h5'
+                            noWrap
+                            component="div"
+                            sx={{ mr: 2, display : "flex" }}
+                            onClick={() => {handleLink("/")}}
+                        >
+                            MILK
+                        </AppbarLogo>
+                        <Box sx={{ flexGrow: 1, display : "flex" }}>
+                            {pages.map((page) => (
+                                <AppbarButton
+                                    key={page.link}
+                                    onClick={() => { handleLink(page.link) }}
+                                    sx={{ my: 2, color: 'white', display: 'block' }}
+                                >
+                                    {page.title}
+                                </AppbarButton>
+                            ))}
+                        </Box>
+                    </Toolbar>
+                </Container>
+            </AppBar>
         </>
     )
 }

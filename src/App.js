@@ -8,6 +8,8 @@ import Quiz from './components/NormalMode';
 import MyOwnQuiz from './components/MyOwnQuiz';
 import WordList from './components/WordList';
 
+
+
 function App() {
   return(
     <>
