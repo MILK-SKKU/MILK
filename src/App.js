@@ -1,5 +1,5 @@
 import React from 'react'
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {HashRouter, Route, Switch} from 'react-router-dom';
 import { hot } from 'react-hot-loader'
 import './App.css';
 import { StyledEngineProvider } from '@mui/material/styles';
@@ -15,14 +15,14 @@ function App() {
     <>
     <StyledEngineProvider injectFirst>
       <div>
-      <BrowserRouter>
+          <HashRouter basename="/">
         <Switch>
           <Route exact path="/" component={Main}/>
           <Route exact path="/randomquiz" component={RandomQuiz}/>
           <Route exact path="/createquiz" component={CreateQuiz}/>
           <Route exact path="/wordlist" component={WordList}/>
         </Switch>
-      </BrowserRouter>
+          </HashRouter>
       </div>      
     </StyledEngineProvider>
     </>
