@@ -1,15 +1,22 @@
 import { useEffect, useState } from 'react'
 import Appbar from '../components/Appbar';
 import axios from 'axios'
-import { CardTitle, DividerMarginalized, FullQuizCard, SolutionCard, SolutionLineDiv, Spinner, TypoDefinition, TypoMain, TypoMainDefinition, TypoPos, TypoSim, TypoSimContent, TypoSolutionWord, TypoSolutionWordContent } from '../components/StyledComponents';
-import { Container, Divider, Grid, MenuItem, MenuList } from '@mui/material';
+import { CardTitle, DividerMarginalized, FullQuizCard, SolutionCard, SolutionLineDiv, Spinner, SubmitButton, TypoDefinition, TypoMain, TypoMainDefinition, TypoPos, TypoSim, TypoSimContent, TypoSolutionWord, TypoSolutionWordContent } from '../components/StyledComponents';
+import { Button, Container, Divider, Grid, Menu, MenuItem, MenuList } from '@mui/material';
 
 
 
 function WordList({ history }) {
     const [simWord, setSimWord] = useState()
     const [currentWord, setCurrentWord] = useState()
-
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
     const wordList = JSON.parse(localStorage.getItem("wordlist"))
 
     useEffect(() => {
@@ -53,10 +60,15 @@ function WordList({ history }) {
                 :
                 <Container>
                     <FullQuizCard elevation={2} style={{ padding : 16, paddingTop : 32 }}>
-                        <Container style={{display : "flex"}}>
+                        <Container>
                             <Grid container spacing={4}>
-                                <Grid item xs={3}>
-                                    <CardTitle style={{ marginLeft : 15 }}>My Dictionary</CardTitle>
+                                
+                            
+                                <Grid item
+                                    sx={{ display: { xs: 'none', md: 'block' } }}   
+                                    xs={12} md={3}
+                                >
+                                    <CardTitle style={{ marginLeft : 15 }}>Word List</CardTitle>
                                     <MenuList
                                         id="basic-menu"
                                         MenuListProps={{
@@ -72,8 +84,8 @@ function WordList({ history }) {
                                         ))}
                                     </MenuList>
                                 </Grid>
-                                <Grid item xs={9}>
-                                    <TypoMainDefinition>Definition</TypoMainDefinition>
+                                <Grid item xs={12} md={9}>
+                                    <TypoMainDefinition>My Dictionary</TypoMainDefinition>
                                     <DividerMarginalized />
                                     <Grid container>
                                         <Grid item xs={12} lg={2}>
@@ -103,6 +115,43 @@ function WordList({ history }) {
                                         </>
                                     }
                                     
+                                </Grid>
+                                <Grid item
+                                    sx={{ display: { xs: 'flex', md: 'none' } }}
+                                    xs={12} md={3}
+                                >
+                                    <SubmitButton
+                                        id="basic-button"
+                                        aria-controls="basic-menu"
+                                        aria-haspopup="true"
+                                        aria-expanded={open ? 'true' : undefined}
+                                        onClick={handleClick}
+                                    >
+                                        Word List
+                                    </SubmitButton>
+                                    <Menu
+                                        id="basic-menu"
+                                        MenuListProps={{
+                                            'aria-labelledby': 'basic-button',
+                                        }}
+                                        anchorEl={anchorEl}
+                                        open={open}
+                                        onClose={handleClose}
+                                        anchorOrigin={{
+                                            horizontal: 'center',
+                                        }}
+                                        transformOrigin={{
+                                            horizontal: 'center',
+                                        }}
+                                    >
+                                        {wordList.map(item => (
+                                            <>
+                                                <MenuItem onClick={() => { handleClose(); handleDefinition(item) }}>{item.word}</MenuItem>
+
+                                            </>
+
+                                        ))}
+                                    </Menu>
                                 </Grid>
                             </Grid>
 
