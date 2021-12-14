@@ -46,7 +46,9 @@ export const LineDiv = styled.div`
 export const Speaker = styled(TypographyP)`
     color: #3299FF;
     display: inline-block;
-    min-width: 80px;
+    min-width: 40px;
+    font-weight : 600;
+    margin-left : 1px;    
     `
 export const Conversation = styled(TypographyP)`
     margin-left: 10px;
@@ -61,8 +63,8 @@ export const OptionDiv = styled.div`
     }
 `
 export const OptionButton = styled(Button)`
-    font-size : 18px;
-    height : 48px;
+    font-size : 24px;
+    height : 60px;
     border: 1px solid #3299FF;
     border-radius: 40px;
     `
@@ -80,7 +82,7 @@ export const WrongClickOptionButton = styled(OptionButton)`
 `
 export const TypoQuestion = styled(TypographyP)`
     line-height : 24px;
-    margin-bottom : 12px;
+    margin : 24px 0;
     color: ${props => props.color};
 `
 export const SolutionContainer = styled.div`
@@ -144,7 +146,6 @@ export const TypoMainDefinition = styled(Typography)`
     top: 20px;
     left: 30px;
     `
-
 
 export const TypoSim = styled(Typography)`
     font-size: 36px;

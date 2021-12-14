@@ -99,7 +99,7 @@ function Main() {
                         Get Started!
                     </StartButton>
                 </MILKGrid>
-                <MILKGrid item xs={12} lg={6} paddingTop={12}>
+                <MILKGrid item xs={12} lg={6}>
                     <MainImg src="image1.png" />
                 </MILKGrid>
             </MILKGrid>

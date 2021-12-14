@@ -18,6 +18,13 @@ function RandomQuiz({ history, location }) {
         try {
             const response = await axios.get(demoURL)
             const data = response.data
+
+            const answer = data.option[data.solution].word;
+
+            for (const item of data.context){
+                item.content = item.content.replace(answer, "__________")
+            }
+
             const emptyOptions = [
                 {
                     flag: false,
@@ -212,6 +219,4 @@ function RandomQuiz({ history, location }) {
 export default RandomQuiz;
 
 
-const demoURL = "https://s3.us-west-2.amazonaws.com/secure.notion-static.com/6e63bfb3-5f74-4c10-b9d7-6f5ff70c6d89/demo.json?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20211214%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20211214T082855Z&X-Amz-Expires=86400&X-Amz-Signature=d8e834f496cd460ddeaeccffeb6f1880fa22c311bed662cda387b653e85757b4&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22demo.json%22&x-id=GetObject"
-
-
+const demoURL = "https://s3.us-west-2.amazonaws.com/secure.notion-static.com/672257ec-f564-4669-8f31-ad0dada2e4eb/0.json?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20211214%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20211214T183057Z&X-Amz-Expires=86400&X-Amz-Signature=c59adebcbdeb01dba09f99907a14d059aba658314cb212a99b59b9d1aaaefbc4&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%220.json%22&x-id=GetObject"

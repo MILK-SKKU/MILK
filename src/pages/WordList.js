@@ -17,8 +17,10 @@ function WordList({ history }) {
     const handleClose = () => {
         setAnchorEl(null);
     };
-    const wordList = JSON.parse(localStorage.getItem("wordlist"))
-
+    const rawWordList = localStorage.getItem("wordlist");
+    
+    const wordList = rawWordList === null ? [] : JSON.parse(rawWordList) 
+    console.log(wordList);
     useEffect(() => {
         setCurrentWord(wordList[0])
     }, [])
@@ -56,13 +58,18 @@ function WordList({ history }) {
         <>
             <Appbar />
             {wordList === undefined || currentWord === undefined ?
-                <Spinner style={{ height: 80, width: 80 }} />
+                <Container>
+                    <FullQuizCard elevation={2} style={{ padding: 16, paddingTop: 32, minHeight : 500 }}>
+                        <TypoMainDefinition>
+                            There is no word in dictionary!
+                        </TypoMainDefinition>
+                    </FullQuizCard>
+                </Container>
                 :
                 <Container>
-                    <FullQuizCard elevation={2} style={{ padding : 16, paddingTop : 32 }}>
+                    <FullQuizCard elevation={2} style={{ padding : 16, paddingTop : 32, minHeight:500 }}>
                         <Container>
                             <Grid container spacing={4}>
-                                
                             
                                 <Grid item
                                     sx={{ display: { xs: 'none', md: 'block' } }}   
