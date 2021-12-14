@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import styled from 'styled-components';
 import { AppBar, Box, Divider, Typography, Button, Container, Card } from '@mui/material';
 import Appbar from './Appbar';
-import axios from 'axios'
 import CircularProgress from '@mui/material/CircularProgress';
 import Helmet from 'react-helmet';
 
@@ -11,6 +10,11 @@ const TypographyP = styled(Typography)`
     font-family : "Pretendard";
     font-size : 18px;
     line-height : 42px;
+`
+
+const DividerMarginalized = styled(Divider)`
+    margin-top : 12px;
+    margin-bottom : 12px;
 `
 
 const Spinner = styled(CircularProgress)`
@@ -22,19 +26,19 @@ const NextQuestionBar = styled(AppBar)`
     height: 60px;
     bottom: 0;
     top: auto;
-    background-color: skyblue;
     `
 const NextButton = styled(Button)`
     position: absolute;
     right: 40px;
     height: 40px;
     width: 80px;
-    background: #3299FF;;
+    background: #FFF;;
     top: 10px;
     border-radius: 5px;
     `
 const FullQuizCard = styled(Card)`
     padding : 24px 36px;
+    margin-top : 32px;
     `
 const CardTitle = styled(TypographyP)`
     font-weight : 600;
@@ -62,207 +66,138 @@ const OptionDiv = styled.div`
     }
 `
 const OptionButton = styled(Button)`
-    width: 100%;
+    font-size : 18px;
+    height : 48px;
     border: 1px solid #3299FF;
     border-radius: 40px;
     `
 
 // 변경 Button들 수정 필요함
-const CorrectOptionButton = styled(Button)`
-    width: 100%;
-    height: 50px;
+const CorrectOptionButton = styled(OptionButton)`
     border: ${props => props.flag ? "1px solid #00B448" : "1px solid #3299FF"} ;
-    border-radius: 40px;
+    color: ${props => props.flag ? "#00B448" : "#3299FF"} ;
 `
-const WrongOptionButton = styled(Button)`
-    width: 100%;
-    height: 50px;
+const WrongOptionButton = styled(OptionButton)`
     border: ${props => props.flag ? "1px solid #00B448" : "1px solid #3299FF"} ;
-    border-radius: 40px;
+    color: ${props => props.flag ? "#00B448" : "#3299FF"} ;
 `
-const WrongClickOptionButton = styled(Button)`
-    width: 100%;
-    height: 50px;
+const WrongClickOptionButton = styled(OptionButton)`
     border: 1px solid #FF3232;
-    border-radius: 40px;
+    color : #FF3232;
 `
 
 // 변경 Button들 수정 필요함
 
 
 const TypoQuestion = styled(TypographyP)`
-    color: #999999;
+    color: ${props => props.color};
     `
-const TypoQuestionCorrect = styled(TypographyP)`
-    color: blue;
-`
-const TypoQuestionWrong = styled(TypographyP)`
-    color: red;
-    `
-
 
 const SolutionContainer = styled.div`
-    top: 40px;
+    margin-top : 32px;
     display: grid;
-    gap: 1rem;
+    gap: 1.5rem;
     grid-template-columns: 1fr 1fr;
-    left: 25px;
-    width: calc(100% - 50px);
-    margin-bottom: 140px;
 
     @media only screen and (max-width: 768px){
         grid-template-columns: 1fr;
     }
     `
-const SolutionCard = styled(Card)`
-    width: 100%;
-    padding-bottom: 50px;
+const SolutionCard = styled.div`
     border: 1px solid #3299FF;
     border-radius: 40px;
-    margin-bottom: 15px;
+    padding : 16px 24px;
 `
 const TypoSolutionWord = styled(TypographyP)`
+    font-weight : 600;
     font-size: 28px;
-    line-height: 42px;
-    color: #000000;
-    top: 20px
     `
 const SolutionLineDiv = styled.div`
     display: flex;
     flex-direction: row;
-    width: calc(100% - 70px)
-    top: 30px;
 `
 
 const TypoSolutionWordContent = styled(TypographyP)`
-    line-height: 30px;
     color: #3299FF;
     min-width: 60px;
-
     `
 const TypoDefinition = styled(TypographyP)`
-    font-weight: normal;
-    line-height: 30px;
     color: #000000;
-    left: 20px;
     `
 const TypoPos = styled(TypographyP)`
-    font-weight: normal;
     font-size: 14px;
-    line-height: 30px;
     color: #000000;
-    top: -10px;
-    left: 0px;
     `
-const EmptyDiv = styled.div`
-    bottom: 0;
-    top: auto;
-    height: 100px;
-    `
+
+const demoURL = "https://s3.us-west-2.amazonaws.com/secure.notion-static.com/6e63bfb3-5f74-4c10-b9d7-6f5ff70c6d89/demo.json?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20211214%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20211214T082855Z&X-Amz-Expires=86400&X-Amz-Signature=d8e834f496cd460ddeaeccffeb6f1880fa22c311bed662cda387b653e85757b4&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22demo.json%22&x-id=GetObject"
 
 function NormalMode({ history, location }) {
     const [quizNumber, setQuizNumber] = useState(1)
     const [checkAnswer, setCheckAnswer] = useState(false)
     const [quizData, setQuizData] = useState()
     const [option, setOption] = useState()
-    const [solutionDict, setSolutionDict] = useState()
-
     const [correctFlag, setCorrectFlag] = useState(false)
     const [wrongFlag, setWrongFlag] = useState(false)
     const [normalFlag, setNormalFlag] = useState(true)
-
-    useEffect(() => {
-        //---기존 방식---
-        // async function getQuiz(){
-        //     try{
-        //         const response = await axios.get(`https://server.jasonchoi.dev:33307/prob`)
-        //         console.log(response)
-        //         setQuizData(response.data)
-        //         setOption(response.data.option)
-        //         console.log(response.data.option)
-        //     }catch(err){
-        //         console.log(err)
-        //     }
-        // }
-        // getQuiz()
-
-        // SETTING TEST DATA
-        setQuizData({
-            problem: [
+    async function getQuiz() {
+        try {
+            const data = await fetch(demoURL).then(res => res.json())
+            const emptyOptions = [
                 {
-                    content: "말하는 내용 1",
-                    speaker: "말하는 사람 1"
-                },
-                {
-                    content: "말하는 내용 2",
-                    speaker: "말하는 사람 2"
-                },
-                {
-                    content: "말하는 내용 1",
-                    speaker: "말하는 사람 1"
-                },
-            ],
-            solution: "정답",
-            option: [
-                {
-                    word: "오답1",
-                    flag: false,
-                    check: false
-                },
-
-                {
-                    word: "오답2",
                     flag: false,
                     check: false
                 },
                 {
-                    word: "정답",
-                    flag: true,
-                    check: false
-                },
-            ]
-        })
-        setOption(
-            [
-                {
-                    word: "오답1",
                     flag: false,
                     check: false
                 },
                 {
-                    word: "오답2",
                     flag: false,
                     check: false
                 },
                 {
-                    word: "정답",
-                    flag: true,
-                    check: false
-                },
-                {
-                    word: "오답3",
                     flag: false,
                     check: false
                 },
             ]
-        )
+            emptyOptions[data.solution].flag = true
 
-    }, [])
+            setQuizData(data)
+            setOption(emptyOptions)
+
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+
+    useEffect(() => { getQuiz() }, [])
+    
+    const handleNext = () => {
+        setQuizNumber(quizNumber => quizNumber + 1)
+        setCheckAnswer(false)
+        setNormalFlag(true)
+        setCorrectFlag(false)
+        setWrongFlag(false)
+
+        getQuiz()
+    }
 
     const handleCheckAnswer = (answer) => {
-        let tmpArr = []
+        console.log(option)
 
+        //틀리면
         if (answer !== quizData.solution) {
             setWrongFlag(true)
             setNormalFlag(false)
-            setOption(option.map(info =>
-                answer === info.word ? { ...info, check: !info.check } : info))
+            const tmp = [...option];
+            tmp[answer].check = true;
+            setOption(tmp)
 
             async function checkDict(word) {
-                try {
-                    const response = await axios.get(`https://server.jasonchoi.dev:33307/dict/${word}`)
+                try {                   
                     if (sessionStorage.length === 0) {
-                        let tmpArr = [quizData.solution]
+                        let tmpArr = [quizData.option[quizData.solution].word]
                         sessionStorage.setItem("wordlist", JSON.stringify(tmpArr))
                     } else {
                         let tmpArr = JSON.parse(sessionStorage.getItem("wordlist"))
@@ -281,55 +216,10 @@ function NormalMode({ history, location }) {
             setNormalFlag(false)
         }
 
-
-        async function getTmp(arr) {
-            try {
-                const postJSON = {
-                    words: arr
-                }
-                const response = await axios.post(`https://server.jasonchoi.dev:33307/dicts`, postJSON)
-                console.log(response)
-                setSolutionDict(response.data.dicts)
-
-            } catch (err) {
-                console.log(err)
-            }
-        }
-
-        for (let i = 0; i < option.length; i++) {
-            tmpArr.push(option[i].word)
-            console.log(solutionDict)
-            console.log(tmpArr)
-        }
-        //4개 단어 사전 세팅, 이 부분 바꿀건지?
-
-        getTmp(tmpArr)
-        console.log(solutionDict)
         setCheckAnswer(true)
     }
 
-    const handleNext = () => {
-        setQuizNumber(quizNumber => quizNumber + 1)
-        setCheckAnswer(false)
-        setNormalFlag(true)
-        setCorrectFlag(false)
-        setWrongFlag(false)
-        setSolutionDict([])
-
-        async function getQuiz() {
-            try {
-                const response = await axios.get(`https://server.jasonchoi.dev:33307/prob`)
-                setQuizData(response.data)
-                setOption(response.data.option)
-            } catch (err) {
-                console.log(err)
-            }
-        }
-        getQuiz()
-
-        // JSON 리스트에서 가지고 오는 방식으로 바꿔야함.
-    }
-
+    
     return (
         <>
         <Helmet>
@@ -342,8 +232,9 @@ function NormalMode({ history, location }) {
                 `}
             </style>
         </Helmet>
+
         <Appbar />
-        {quizData === undefined || option === undefined
+        {quizData === undefined
             ?
             <Spinner style={{ height: 80, width: 80 }} />
             :
@@ -352,7 +243,7 @@ function NormalMode({ history, location }) {
                 <FullQuizCard elevation={2}>
                     <CardTitle>Quiz #{quizNumber}</CardTitle>
                     <div>
-                        {quizData.problem.map(item => (
+                        {quizData.context.map(item => (
                             <>
                                 <LineDiv>
                                     <Speaker>{item.speaker}</Speaker>
@@ -361,33 +252,33 @@ function NormalMode({ history, location }) {
                             </>
                         ))}
                     </div>
-                    <Divider />
-                    {normalFlag && <TypoQuestion>Considering the context, Choose the right word for the blank.</TypoQuestion>}
-                    {correctFlag && <TypoQuestionCorrect>correct!</TypoQuestionCorrect>}
-                    {wrongFlag && <TypoQuestionWrong>wrong!</TypoQuestionWrong>}
+                    <DividerMarginalized />
+                    {normalFlag && <TypoQuestion color="#999999">Considering the context, Choose the right word for the blank.</TypoQuestion>}
+                    {correctFlag && <TypoQuestion color="#3299FF">Correct!</TypoQuestion>}
+                    {wrongFlag && <TypoQuestion color="#FF3232">Wrong!</TypoQuestion>}
 
                     <OptionDiv>
                         {normalFlag &&
                             <>
-                                {option.map(opt => (
-                                    <OptionButton onClick={() => { handleCheckAnswer(opt.word) }}>{opt.word}</OptionButton>
+                                {quizData.option.map((opt, idx) => (
+                                    <OptionButton onClick={() => { handleCheckAnswer(idx) }}>{opt.word}</OptionButton>
                                 ))}
                             </>
                         }
                         {correctFlag &&
                             <>
-                                {option.map(opt => (
-                                    <CorrectOptionButton flag={opt.flag}>{opt.word}</CorrectOptionButton>
+                                {option.map((opt, idx) => (
+                                    <CorrectOptionButton flag={opt.flag}>{quizData.option[idx].word}</CorrectOptionButton>
                                 ))}
                             </>
                         }
                         {wrongFlag &&
                             <>
-                                {option.map(opt => (
+                                {option.map((opt, idx) => (
                                     <>
                                         {opt.check ?
-                                            <WrongClickOptionButton>{opt.word}</WrongClickOptionButton> :
-                                            <WrongOptionButton flag={opt.flag}>{opt.word}</WrongOptionButton>
+                                            <WrongClickOptionButton>{quizData.option[idx].word}</WrongClickOptionButton> :
+                                            <WrongOptionButton flag={opt.flag}>{quizData.option[idx].word}</WrongOptionButton>
                                         }
                                     </>
                                 ))}
@@ -395,37 +286,30 @@ function NormalMode({ history, location }) {
                         }
                     </OptionDiv>
                 </FullQuizCard>
-                <EmptyDiv></EmptyDiv>
 
                 {
                     checkAnswer &&
                     <>
                         <FullQuizCard elevation={2}>
                             <CardTitle>Solution #{quizNumber}</CardTitle>
+                            <DividerMarginalized />
                             <SolutionContainer>
-                                {solutionDict === undefined ?
-                                    <Spinner style={{ height: 80, width: 80 }} />
-                                    :
-                                    <>
-                                        {solutionDict.map(item => (
-                                            <SolutionCard>
-                                                <TypoSolutionWord>{item.word}</TypoSolutionWord>
-                                                {item.items.map(word => (
-                                                    <>
-                                                        <SolutionLineDiv>
-                                                            <TypoSolutionWordContent>{item.word}
-                                                                <TypoPos>{word.pos}</TypoPos>
-                                                            </TypoSolutionWordContent>
-                                                            <TypoDefinition>{word.definition}</TypoDefinition>
-                                                        </SolutionLineDiv>
+                                {quizData.option.map(obj => (
+                                    <SolutionCard>
+                                        <TypoSolutionWord>{obj.word}</TypoSolutionWord>
+                                        {obj.items.map(item => (
+                                            <>
+                                                <SolutionLineDiv>
+                                                    <TypoSolutionWordContent>{obj.word}
+                                                        <TypoPos>{item.pos}</TypoPos>
+                                                    </TypoSolutionWordContent>
+                                                    <TypoDefinition>{item.definition}</TypoDefinition>
+                                                </SolutionLineDiv>
 
-                                                    </>
-                                                ))}
-                                            </SolutionCard>
+                                            </>
                                         ))}
-                                    </>
-                                }
-
+                                    </SolutionCard>
+                                ))}
                             </SolutionContainer>
                         </FullQuizCard>
                         <Box sx={{ flexGrow: 1 }}>

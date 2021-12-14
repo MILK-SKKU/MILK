@@ -1,0 +1,73 @@
+{
+    "context": [
+        {
+            "content": "말하는 내용 1",
+            "speaker": "말하는 사람 1"
+        },
+        {
+            "content": "말하는 내용 2",
+            "speaker": "말하는 사람 2"
+        },
+        {
+            "content": "말하는 내용 1",
+            "speaker": "말하는 사람 1"
+        }
+    ],
+    "option": [
+        {
+            "word": "오답1",
+            "items" : [
+                {
+                    "pos": "동사",
+                    "definition": "이것은 단어입니다.1"
+                },
+                {
+                    "pos": "명사",
+                    "definition": "이것은 단어입니다.1"
+                }
+            ]
+            
+        },
+        {
+            "word": "오답2",
+            "items": [
+                {
+                    "pos": "동사",
+                    "definition": "이것은 단어입니다.1"
+                },
+                {
+                    "pos": "명사",
+                    "definition": "이것은 단어입니다.1"
+                }
+            ]
+        },
+        {
+            "word": "정답",
+            "items": [
+                {
+                    "pos": "동사",
+                    "definition": "이것은 단어입니다.1"
+                },
+                {
+                    "pos": "명사",
+                    "definition": "이것은 단어입니다.1"
+                }
+            ]
+        },
+        {
+            "word": "오답3",
+            "items": [
+                {
+                    "pos": "동사",
+                    "definition": "이것은 단어입니다.1"
+                },
+                {
+                    "pos": "명사",
+                    "definition": "이것은 단어입니다.1"
+                }
+            ]
+        }
+    ],
+    "solution": 1
+}
+
