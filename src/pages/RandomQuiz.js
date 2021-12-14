@@ -1,137 +1,12 @@
 import { useEffect, useState } from 'react'
-import styled from 'styled-components';
-import { AppBar, Box, Divider, Typography, Button, Container, Card } from '@mui/material';
-import Appbar from './Appbar';
-import CircularProgress from '@mui/material/CircularProgress';
+
+import Appbar from '../components/Appbar';
 import Helmet from 'react-helmet';
+import { CardTitle, Conversation, CorrectOptionButton, DividerMarginalized, FullQuizCard, LineDiv, NextButton, NextQuestionBar, OptionButton, OptionDiv, SolutionCard, SolutionContainer, SolutionLineDiv, Speaker, Spinner, TypoDefinition, TypoPos, TypoQuestion, TypoSolutionWord, TypoSolutionWordContent, WrongClickOptionButton, WrongOptionButton } from '../components/StyledComponents';
+import { Box, Container } from '@mui/material';
+import axios from 'axios';
 
-
-const TypographyP = styled(Typography)`
-    font-family : "Pretendard";
-    font-size : 18px;
-    line-height : 42px;
-`
-
-const DividerMarginalized = styled(Divider)`
-    margin-top : 12px;
-    margin-bottom : 12px;
-`
-
-const Spinner = styled(CircularProgress)`
-    position: fixed;
-    left: calc(50% - 40px);
-    top: calc(50vh - 70px);
-`
-const NextQuestionBar = styled(AppBar)`
-    height: 60px;
-    bottom: 0;
-    top: auto;
-    `
-const NextButton = styled(Button)`
-    position: absolute;
-    right: 40px;
-    height: 40px;
-    width: 80px;
-    background: #FFF;;
-    top: 10px;
-    border-radius: 5px;
-    `
-const FullQuizCard = styled(Card)`
-    padding : 24px 36px;
-    margin-top : 32px;
-    `
-const CardTitle = styled(TypographyP)`
-    font-weight : 600;
-    font-size: 32px;
-    `
-const LineDiv = styled.div`
-    display: flex;
-    flex-direction: row;
-    `
-const Speaker = styled(TypographyP)`
-    color: #3299FF;
-    display: inline-block;
-    min-width: 80px;
-    `
-const Conversation = styled(TypographyP)`
-    margin-left: 10px;
-    `
-
-const OptionDiv = styled.div`
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: 1fr 1fr;
-    @media only screen and (max-width: 768px){
-        grid-template-columns: 1fr;
-    }
-`
-const OptionButton = styled(Button)`
-    font-size : 18px;
-    height : 48px;
-    border: 1px solid #3299FF;
-    border-radius: 40px;
-    `
-
-// 변경 Button들 수정 필요함
-const CorrectOptionButton = styled(OptionButton)`
-    border: ${props => props.flag ? "1px solid #00B448" : "1px solid #3299FF"} ;
-    color: ${props => props.flag ? "#00B448" : "#3299FF"} ;
-`
-const WrongOptionButton = styled(OptionButton)`
-    border: ${props => props.flag ? "1px solid #00B448" : "1px solid #3299FF"} ;
-    color: ${props => props.flag ? "#00B448" : "#3299FF"} ;
-`
-const WrongClickOptionButton = styled(OptionButton)`
-    border: 1px solid #FF3232;
-    color : #FF3232;
-`
-
-// 변경 Button들 수정 필요함
-
-
-const TypoQuestion = styled(TypographyP)`
-    color: ${props => props.color};
-    `
-
-const SolutionContainer = styled.div`
-    margin-top : 32px;
-    display: grid;
-    gap: 1.5rem;
-    grid-template-columns: 1fr 1fr;
-
-    @media only screen and (max-width: 768px){
-        grid-template-columns: 1fr;
-    }
-    `
-const SolutionCard = styled.div`
-    border: 1px solid #3299FF;
-    border-radius: 40px;
-    padding : 16px 24px;
-`
-const TypoSolutionWord = styled(TypographyP)`
-    font-weight : 600;
-    font-size: 28px;
-    `
-const SolutionLineDiv = styled.div`
-    display: flex;
-    flex-direction: row;
-`
-
-const TypoSolutionWordContent = styled(TypographyP)`
-    color: #3299FF;
-    min-width: 60px;
-    `
-const TypoDefinition = styled(TypographyP)`
-    color: #000000;
-    `
-const TypoPos = styled(TypographyP)`
-    font-size: 14px;
-    color: #000000;
-    `
-
-const demoURL = "https://s3.us-west-2.amazonaws.com/secure.notion-static.com/6e63bfb3-5f74-4c10-b9d7-6f5ff70c6d89/demo.json?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20211214%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20211214T082855Z&X-Amz-Expires=86400&X-Amz-Signature=d8e834f496cd460ddeaeccffeb6f1880fa22c311bed662cda387b653e85757b4&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22demo.json%22&x-id=GetObject"
-
-function NormalMode({ history, location }) {
+function RandomQuiz({ history, location }) {
     const [quizNumber, setQuizNumber] = useState(1)
     const [checkAnswer, setCheckAnswer] = useState(false)
     const [quizData, setQuizData] = useState()
@@ -141,7 +16,8 @@ function NormalMode({ history, location }) {
     const [normalFlag, setNormalFlag] = useState(true)
     async function getQuiz() {
         try {
-            const data = await fetch(demoURL).then(res => res.json())
+            const response = await axios.get(demoURL)
+            const data = response.data
             const emptyOptions = [
                 {
                     flag: false,
@@ -196,13 +72,13 @@ function NormalMode({ history, location }) {
 
             async function checkDict(word) {
                 try {                   
-                    if (sessionStorage.length === 0) {
-                        let tmpArr = [quizData.option[quizData.solution].word]
-                        sessionStorage.setItem("wordlist", JSON.stringify(tmpArr))
+                    if (localStorage.length === 0) {
+                        let tmpArr = [quizData.option[quizData.solution]]
+                        localStorage.setItem("wordlist", JSON.stringify(tmpArr))
                     } else {
-                        let tmpArr = JSON.parse(sessionStorage.getItem("wordlist"))
-                        tmpArr.push(quizData.solution)
-                        sessionStorage.setItem("wordlist", JSON.stringify(tmpArr))
+                        let tmpArr = JSON.parse(localStorage.getItem("wordlist"))
+                        tmpArr.push(quizData.option[quizData.solution])
+                        localStorage.setItem("wordlist", JSON.stringify(tmpArr))
                     }
 
                 } catch (err) {
@@ -219,7 +95,7 @@ function NormalMode({ history, location }) {
         setCheckAnswer(true)
     }
 
-    
+
     return (
         <>
         <Helmet>
@@ -236,10 +112,12 @@ function NormalMode({ history, location }) {
         <Appbar />
         {quizData === undefined
             ?
+            
             <Spinner style={{ height: 80, width: 80 }} />
             :
             <>
-            <Container>
+        
+            <Container style={{ marginBottom : 100 }}>
                 <FullQuizCard elevation={2}>
                     <CardTitle>Quiz #{quizNumber}</CardTitle>
                     <div>
@@ -249,6 +127,7 @@ function NormalMode({ history, location }) {
                                     <Speaker>{item.speaker}</Speaker>
                                     <Conversation>{item.content}</Conversation>
                                 </LineDiv>
+                                
                             </>
                         ))}
                     </div>
@@ -300,9 +179,11 @@ function NormalMode({ history, location }) {
                                         {obj.items.map(item => (
                                             <>
                                                 <SolutionLineDiv>
-                                                    <TypoSolutionWordContent>{obj.word}
-                                                        <TypoPos>{item.pos}</TypoPos>
+                                                    <TypoSolutionWordContent>
+                                                        {obj.word}
+                                                        
                                                     </TypoSolutionWordContent>
+                                                    <TypoPos>{item.pos}</TypoPos>
                                                     <TypoDefinition>{item.definition}</TypoDefinition>
                                                 </SolutionLineDiv>
 
@@ -326,5 +207,11 @@ function NormalMode({ history, location }) {
     )
 }
 
-export default NormalMode
+
+
+export default RandomQuiz;
+
+
+const demoURL = "https://s3.us-west-2.amazonaws.com/secure.notion-static.com/6e63bfb3-5f74-4c10-b9d7-6f5ff70c6d89/demo.json?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20211214%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20211214T082855Z&X-Amz-Expires=86400&X-Amz-Signature=d8e834f496cd460ddeaeccffeb6f1880fa22c311bed662cda387b653e85757b4&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22demo.json%22&x-id=GetObject"
+
 

@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components';
 import { Typography, Button, Grid, Container } from '@mui/material';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
-import Appbar from './Appbar';
+import Appbar from '../components/Appbar';
 import Helmet from 'react-helmet';
 
 const MILKGrid = styled(Grid)`
