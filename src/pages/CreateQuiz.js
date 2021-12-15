@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Box, Container } from '@mui/material';
 import Appbar from '../components/Appbar';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
@@ -15,7 +15,6 @@ function MyOwnQuiz() {
     const [beforeMyText, setBeforeMyText] = useState(true)
     const [myText, setMyText] = useState("")
     const [option, setOption] = useState()
-    const [solutionDict, setSolutionDict] = useState([])
 
     const [correctFlag, setCorrectFlag] = useState(false)
     const [wrongFlag, setWrongFlag] = useState(false)

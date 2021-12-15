@@ -15,14 +15,14 @@ function App() {
     <>
     <StyledEngineProvider injectFirst>
       <div>
-          <HashRouter basename="/">
-        <Switch>
-          <Route exact path="/" component={Main}/>
-          <Route exact path="/randomquiz" component={RandomQuiz}/>
-          <Route exact path="/createquiz" component={CreateQuiz}/>
-          <Route exact path="/wordlist" component={WordList}/>
-        </Switch>
-          </HashRouter>
+        <HashRouter basename="/">
+          <Switch>
+            <Route exact path="/" component={Main}/>
+            <Route exact path="/randomquiz" component={RandomQuiz}/>
+            <Route exact path="/createquiz" component={CreateQuiz}/>
+            <Route exact path="/wordlist" component={WordList}/>
+          </Switch>
+        </HashRouter>
       </div>      
     </StyledEngineProvider>
     </>

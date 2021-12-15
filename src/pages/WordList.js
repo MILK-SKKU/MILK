@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import Appbar from '../components/Appbar';
 import axios from 'axios'
-import { CardTitle, DividerMarginalized, FullQuizCard, SolutionCard, SolutionLineDiv, Spinner, SubmitButton, TypoDefinition, TypoMain, TypoMainDefinition, TypoPos, TypoSim, TypoSimContent, TypoSolutionWord, TypoSolutionWordContent } from '../components/StyledComponents';
-import { Button, Container, Divider, Grid, Menu, MenuItem, MenuList } from '@mui/material';
+import { CardTitle, DividerMarginalized, FullQuizCard,    SubmitButton, TypoDefinition,  TypoMainDefinition, TypoPos,  TypoSimContent, TypoSolutionWord, TypoSolutionWordContent } from '../components/StyledComponents';
+import {  Container, Grid, Menu, MenuItem, MenuList } from '@mui/material';
 
 
 
