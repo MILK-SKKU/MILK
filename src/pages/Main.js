@@ -61,7 +61,7 @@ function Main() {
     const history = useHistory()
 
     const handleClickNormalMode = () => {
-        history.push("/normalmode")
+        history.push("/randomquiz")
     }
     
     return (
