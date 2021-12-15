@@ -4,7 +4,6 @@ import Appbar from '../components/Appbar';
 import Helmet from 'react-helmet';
 import { CardTitle, Conversation, CorrectOptionButton, DividerMarginalized, FullQuizCard, LineDiv, NextButton, NextQuestionBar, OptionButton, OptionDiv, SolutionCard, SolutionContainer, SolutionLineDiv, Speaker, Spinner, TypoDefinition, TypoPos, TypoQuestion, TypoSolutionWord, TypoSolutionWordContent, WrongClickOptionButton, WrongOptionButton } from '../components/StyledComponents';
 import { Box, Container } from '@mui/material';
-import axios from 'axios';
 
 function RandomQuiz({ history, location }) {
     const [quizNumber, setQuizNumber] = useState(1)
@@ -14,10 +13,11 @@ function RandomQuiz({ history, location }) {
     const [correctFlag, setCorrectFlag] = useState(false)
     const [wrongFlag, setWrongFlag] = useState(false)
     const [normalFlag, setNormalFlag] = useState(true)
+
     async function getQuiz() {
         try {
-            const response = await axios.get(demoURL)
-            const data = response.data
+            const randomNumber = Math.floor(Math.random() * dataSetAmount)
+            const data = require(`../quiz_set_json/${randomNumber}`)
 
             const answer = data.option[data.solution].word;
 
@@ -219,4 +219,4 @@ function RandomQuiz({ history, location }) {
 export default RandomQuiz;
 
 
-const demoURL = "https://s3.us-west-2.amazonaws.com/secure.notion-static.com/672257ec-f564-4669-8f31-ad0dada2e4eb/0.json?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20211214%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20211214T183057Z&X-Amz-Expires=86400&X-Amz-Signature=c59adebcbdeb01dba09f99907a14d059aba658314cb212a99b59b9d1aaaefbc4&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%220.json%22&x-id=GetObject"
+const dataSetAmount = 1045
