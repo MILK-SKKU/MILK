@@ -114,7 +114,7 @@ export const TypoSolutionWordContent = styled(TypographyP)`
     display : inline;
     font-weight : 600;
     color: #3299FF;
-    min-width: 60px;
+    min-width: 80px;
     margin-right : 10px;
     font-size : 24px;
     `
@@ -125,6 +125,7 @@ export const TypoPos = styled(TypographyP)`
     display : inline;
     font-weight : 600;
     margin-right : 12px;
+    min-width: 40px;
     font-size: 18px;
     color: #999999;
     `
