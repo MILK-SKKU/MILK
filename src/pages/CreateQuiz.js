@@ -26,7 +26,6 @@ function MyOwnQuiz() {
         }
         
         try {
-            // const response = await axios.post(`https://server.jasonchoi.dev:33307/quiz`, postJSON)
             const response = await axios.get(demoURL)
             const data = response.data;
             setQuizData(data)
@@ -131,7 +130,11 @@ function MyOwnQuiz() {
             <>
                 {quizData === undefined || option === undefined
                     ?
-                    <Spinner style={{ height: 80, width: 80 }} />
+                    <>
+                        {"Server Disconnected! Create Quiz Mode is available when MILK-Backend server is online."}
+                    </>
+
+                    
                     :
                     <>
                     <Container style={{ marginBottom: 100 }}>
@@ -187,7 +190,7 @@ function MyOwnQuiz() {
                             checkAnswer &&
                             <>
                                 <FullQuizCard elevation={2}>
-                                            <CardTitle>Answer of Your Quiz!</CardTitle>
+                                    <CardTitle>Answer of Your Quiz!</CardTitle>
                                     <DividerMarginalized />
                                     <SolutionContainer>
                                         {quizData.option.map(obj => (
